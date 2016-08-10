@@ -51,11 +51,6 @@ def perform_transaction(amount, account)
     bills
   end
 
-
-
-
-
-
   def incorrect_pin?(pin_code, actual_pin)
    pin_code != actual_pin
   end
