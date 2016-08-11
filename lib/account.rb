@@ -2,7 +2,7 @@ class Account
   attr_accessor :balance, :account_status, :pin_code, :exp_date, :owner
 
   def initialize(attrs = {})
-    @balance = 50
+    @balance = 0
     @account_status = :active
     @pin_code = '1234'
     @exp_date = set_expiry_date

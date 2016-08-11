@@ -1,45 +1,61 @@
 require './lib/account'
+require './lib/atm'
 require 'pry'
 
 class Person
   attr_accessor :name, :cash, :account
 
-  def initialize(attrs = {})
-    @name = verify_and_set_name(attrs)
+def initialize(attrs = {})
+    @name = set_name(attrs[:name])
     @cash = 0
-    #@deposit += funds
+    @account = nil
   end
 
   def create_account
     @account = Account.new(owner: self)
   end
 
-  def deposit(funds)
-    if @account == nil
-      raise RuntimeError, 'No account present'
-    else
-      @account.balance += funds
-    end
+  def deposit(amount)
+    @account == nil ? missing_account : deposit_funds(amount)
+  end
+
+  def withdraw(args)
+    @account == nil ? missing_account : withdraw_funds(args)
+  end
+
+  def withdraw_funds(args)
+    args[:atm] == nil ? missing_atm : atm = args[:atm]
+    account = @account
+    amount = args[:amount]
+    pin = args[:pin]
+    response = atm.withdraw(amount, pin, account)
+    response[:status] == true ? increase_cash(response) : response
   end
 
   private
-  def verify_and_set_name(attrs)
-    if attrs[:name] == nil
-      raise 'A name is required'
-    else
-      attrs[:name]
-    end
+
+  def deposit_funds(amount)
+    @cash -= amount
+    @account.balance += amount
   end
 
+  def increase_cash(response)
+    @cash += response[:amount]
+  end
 
+  def set_name(name)
+    name == nil ? missing_name : name
+  end
+
+  def missing_name
+    raise ArgumentError, 'A name is required'
+  end
+
+  def missing_account
+    raise RuntimeError, 'No account present'
+  end
+
+  def missing_atm
+    raise RuntimeError, 'An ATM is required'
+  end
 end
-
-
-
-  #  if attr [:account] == nil
-  #    raise 'Can not deposit funds'
-  #  else
-  #    attr [:account]
-  #  end
-#  end
-#end

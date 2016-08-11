@@ -3,8 +3,8 @@ describe Account do
   let(:person) {instance_double('Person', name: 'Thomas')}
   subject { described_class.new({owner: person}) }
 
-  it 'has 50€ on initialize' do
-    expect(subject.balance).to eq 50
+  it 'has 0$ on initialize' do
+    expect(subject.balance).to eq 0
   end
 
   it 'reject withdraw if account is disabled' do

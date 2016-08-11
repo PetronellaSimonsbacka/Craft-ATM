@@ -1,12 +1,13 @@
 require './lib/atm.rb'
 describe Atm do
-  let(:account) { class_double('Account', pin_code: '1234', exp_date: '04/17', status: :active) }
+  let(:account) { double('Account', pin_code: '1234', exp_date: '04/17', account_status: :active) }
   before do
     allow(account).to receive(:balance).and_return(100)
     allow(account).to receive(:balance=)
+    allow(account).to receive(:account_status).and_return(:active)
   end
 
-  it 'has 1000€ on initialize' do
+  it 'has 1000$ on initialize' do
     expect(subject.funds).to eq 1000
   end
 
@@ -48,7 +49,7 @@ describe Atm do
    end
 
    it 'reject withdraw if account is disabled' do
-     allow(account).to receive(:status).and_return(:notactive)
+     allow(account).to receive(:account_status).and_return(:notactive)
      expected_output = { status: false, message: 'account is deactivated', date: Date.today }
      expect(subject.withdraw(6, '1234', account)).to eq expected_output
    end

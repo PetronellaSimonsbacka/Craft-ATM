@@ -3,7 +3,6 @@ class Atm
 
   def initialize
     @funds = 1000
-    @account_status = 'active'
   end
 
   def withdraw(amount, pin_code, account)
@@ -16,8 +15,9 @@ class Atm
       { status: false, message: 'wrong pin', date: Date.today }
     when card_expired?(account.exp_date) then
       { status: false, message: 'card expired', date: Date.today }
-    when account.status != :active then
+    when account.account_status != :active then
       { status: false, message: 'account is deactivated', date: Date.today }
+
     else
       perform_transaction(amount, account)
     end
